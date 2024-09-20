@@ -8,6 +8,7 @@ const path = require('node:path')
 const {BASE_URL, PORT} = require('./constants')
 const scraper = require('./scraper')
 
+
 const app = express()
 
 app.use(express.static(path.join(__dirname+'/public')))
@@ -18,15 +19,12 @@ app.use(helmet());
 
 app.get("/sync", async (req, res) => {
     await scraper.scrape()
-    res.send('Synced !')
+    // res.send('Synced !')
+    res.sendFile(path.join(__dirname, "job_inbox.json"))
 })
 
 app.get("/dashboard", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "views", "index.html"))
-})
-
-app.get("/api/jobs", ()=>{
-
 })
 
 app.listen(PORT, () => console.log(`Server active on port ${PORT}`))

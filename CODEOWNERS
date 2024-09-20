@@ -1,0 +1,23 @@
+# This file is generated automatically by OpenSauced pizza-cli. DO NOT EDIT. Stay saucy!
+#
+# Generated with command:
+# $ pizza generate codeowners Job_Scraping_Project/
+
+Client/.gitignore @Shivam Verma
+Client/README.md @Shivam Verma
+Client/eslint.config.js @Shivam Verma
+Client/index.html @Shivam Verma
+Client/package.json @Shivam Verma
+Client/src/App.jsx @Shivam Verma
+Client/src/index.css @Shivam Verma
+Client/src/main.jsx @Shivam Verma
+Client/vite.config.js @Shivam Verma
+server/.gitignore @Shivam Verma
+server/constants.js @Shivam Verma
+server/job_inbox.json @Shivam Verma
+server/package-lock.json @Shivam Verma
+server/package.json @Shivam Verma
+server/public/stylesheets/index.css @Shivam Verma
+server/public/views/index.html @Shivam Verma
+server/scraper.js @Shivam Verma
+server/server.js @Shivam Verma

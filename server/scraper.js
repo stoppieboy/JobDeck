@@ -22,10 +22,12 @@ async function login(){
     console.log(result.headers)
     const cookie = result.headers['set-cookie'][0].split(';')[0]
     console.log(cookie)
-    job_inbox(cookie)
+    // job_inbox(cookie)
+    return cookie
 }
 
-async function job_inbox(cookie){
+async function job_inbox(){
+    const cookie = await login()
     const result = await axios.get(BASE_URL+"/CR/Student_job_inbox", {
         headers: {
             Cookie: cookie
@@ -36,36 +38,36 @@ async function job_inbox(cookie){
             //     protocol: 'http'
             // },
             // withCredentials: true
-        })
-        const data = result.data
-        const $ = cheerio.load(data)
-        // const job_posts = $.extract({
-        //     job_posts: {
-        //         selector: [".result-info"],
-        //         value: {
-        //             selector: ["tr"],
-        //             value: {
-        //                 label: 'td:eq(1)',
-        //                 value: 'td:eq(3)'
-        //             }
-        //         }
-        //     }
-        // })
+    })
+    const data = result.data
+    const $ = cheerio.load(data)
 
-        const job_posts = [...$(".result-info")].map(e => 
-            [...$(e).find("tr")].map(e =>
-                [...$(e).find('td')].filter(e=>$(e).text() !== ':').map(e => $(e).text())
-            )
-        )
-        console.log(job_posts)
-        // console.log("job result:", data)
-        console.log("successful:",[200, 201].includes(result.status))
-        fs.writeFileSync("job_inbox.json", JSON.stringify(job_posts))
+    // const job_posts = [...$(".result-info")].map(e =>
+    //     [...$(e).find("tr")].map(e =>
+    //         [...$(e).find('td')]
+    //         // $(e).find('td')[0]
+    //         .filter(e=>$(e).text() !== ':')
+    //         .map(e => 
+    //             $(e).text()
+    //         )
+    //     )
+    // )
+
+    const job_posts = [...$(".result-info")].map((e) => {
+        var res_obj = {}
+        for(i of $(e).find("tr")){
+            var columns = $(i).find("td")
+            res_obj[$(columns[0]).text()] = $(columns[2]).text()
+        }
+        return res_obj
+    })
+
+    // console.log(job_posts)
+    // console.log("job result:", data)
+    // console.log("successful:",[200, 201].includes(result.status))
+    fs.writeFileSync("job_inbox.json", JSON.stringify(job_posts))
+    // fs.writeFileSync("job_inbox_test.json", JSON.stringify(job_posts))
     // console.log(result)
-}
-
-async function job_info(){
-    
 }
 
 // test()
@@ -73,5 +75,5 @@ async function job_info(){
 // job_inbox()
 
 module.exports = {
-    scrape: login
+    scrape: job_inbox
 }
