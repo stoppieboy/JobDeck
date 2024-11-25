@@ -4,9 +4,6 @@ const fs = require('node:fs')
 const qs = require('node:querystring')
 const cheerio = require('cheerio')
 
-// console.log(BASE_URL)
-// axios.defaults.withCredentials = true
-
 async function test(){
     const result = await axios.get(BASE_URL)
     // console.log(result.headers['set-cookie'])
@@ -34,7 +31,6 @@ async function login(){
 async function job_inbox(){
     console.log('Logging in...')
     const cookie = await login()
-    // console.log('Login successful.')
     console.log('Fetching Job Data...')
     const result = await axios.get(BASE_URL+"/CR/Student_job_inbox", {
         headers: {
@@ -45,7 +41,6 @@ async function job_inbox(){
             //     port: 8080,
             //     protocol: 'http'
             // },
-            // withCredentials: true
     })
     const data = result.data
     if(data) console.log('Job Data fetched successfully')
@@ -72,7 +67,11 @@ async function job_inbox(){
         }
 
         for(i of $(e).find(".result-price a")){
-            res_obj['href'] = $(i).attr('href')
+            res_obj['href'] = $(i).attr('href').slice(41)
+        }
+
+        for(i of $(e).find(".result-price img")){
+            res_obj['applied'] = $(i).attr('title').slice(11)
         }
 
         return res_obj
@@ -97,10 +96,40 @@ async function job_inbox(){
     console.log('data persisted.')
 }
 
+async function scrapeJob(){
+    try{
+        const id = '/1/7480/628949734'
+        console.log('Logging in...')
+        const cookie = await login()
+        console.log('Fetching Job Data...')
+        const result = await axios.get(`${BASE_URL}/CR/job_description${id}`, {
+            headers: {
+                Cookie: cookie
+            }
+        });
+        // console.log(result)
+        const $ = cheerio.load(result.data)
+
+        $(".result-info").first()
+
+        const jd = [...$(".result-info").slice(1)].map(e => {
+            var res_obj = {}
+            console.log($(e).find('tr').find('td').text())
+        })
+        return result;
+    }catch(e){
+        console.log(e)
+        // return result;
+        // console.log(e)
+    }
+}
+
 // test()
 // login()
 // job_inbox()
+// scrapeJob()
 
 module.exports = {
-    scrape: job_inbox
+    scrape: job_inbox,
+    scrapeJob
 }

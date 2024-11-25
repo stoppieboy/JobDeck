@@ -32,6 +32,14 @@ app.get("/fetchJobs", (req, res) => {
     res.sendFile(path.join(__dirname, "job_inbox.json"))
 })
 
+app.get("/jd/:id", async (req, res) => {
+    try{
+        const result = await scraper.scrapeJob();
+    }catch(e){
+        
+    }
+})
+
 app.get("/dashboard", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "views", "index.html"))
 })

@@ -1,0 +1,10 @@
+services:
+  server:
+    build:
+      context: 'server'
+      dockerfile: 'dockerfile'
+  client:
+    container_name: client
+    build:
+      context: 'client'
+      dockerfile: 'dockerfile'

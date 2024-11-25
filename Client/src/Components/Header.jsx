@@ -10,7 +10,8 @@ const Header = ({setJobData}) => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        fetchJobsHandler()
+        // fetchJobsHandler()
+        syncHandler()
     }, [])
 
     async function syncHandler(){
@@ -21,6 +22,7 @@ const Header = ({setJobData}) => {
             // console.log(result.data)
             setJobData(result.data)
         }catch(e){
+            console.log(e)
             alert('Some error occured')
         }
         finally{
@@ -35,6 +37,7 @@ const Header = ({setJobData}) => {
             const result = await axios.get("http://localhost:3000/fetchJobs")
             setJobData(result.data)
         }catch(e){
+            console.log(e)
             alert('some error occured')
         }finally{
             setLoading(false)
